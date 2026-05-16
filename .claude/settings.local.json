@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.instagram.com)",
+      "WebSearch",
+      "WebFetch(domain:sxodim.com)",
+      "WebFetch(domain:shym.restoran.kz)",
+      "Bash(npm install:*)",
+      "Bash(npx next:*)",
+      "Bash(find . -name *.js -o -name *.jsx -o -name *.mjs)"
+    ]
+  }
+}
