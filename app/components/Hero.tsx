@@ -1,61 +1,72 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "motion/react";
 import { useT } from "../i18n/LanguageProvider";
 
 export default function Hero() {
   const ref = useRef<HTMLElement | null>(null);
   const { t } = useT();
+  const reduceMotion = useReducedMotion();
+  const [enabled, setEnabled] = useState(false);
 
+  // Decide once on mount whether to enable parallax.
+  // Disable on touch / small / coarse pointer / reduced-motion.
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    // Skip parallax for users who prefer reduced motion, on small screens,
-    // and on touch-primary devices — keeps mobile scroll buttery.
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const small = window.matchMedia("(max-width: 720px)").matches;
     const coarse = window.matchMedia("(pointer: coarse)").matches;
-    if (reduce || small || coarse) return;
+    setEnabled(!reduceMotion && !small && !coarse);
+  }, [reduceMotion]);
 
-    let raf = 0;
-    let pending = false;
+  // Single scroll source for all layers
+  const { scrollY } = useScroll();
 
-    const update = () => {
-      pending = false;
-      const rect = el.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-      const offset = -rect.top;
-      el.style.setProperty("--parallax", String(offset));
-    };
+  // Spring-smooth the scroll value — this is what makes it feel buttery
+  // even when scroll events fire irregularly or frames are dropped.
+  const smoothScrollY = useSpring(scrollY, {
+    stiffness: 200,
+    damping: 40,
+    mass: 0.4,
+  });
 
-    const onScroll = () => {
-      if (pending) return;
-      pending = true;
-      raf = window.requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      window.cancelAnimationFrame(raf);
-    };
-  }, []);
+  // Each layer reads from the smoothed source at a different rate.
+  // Multipliers match the previous CSS-variable parallax.
+  const ySky = useTransform(smoothScrollY, (v) => v * 0.15);
+  const yBack = useTransform(smoothScrollY, (v) => v * 0.35);
+  const yFront = useTransform(smoothScrollY, (v) => v * 0.6);
+  const yTent = useTransform(smoothScrollY, (v) => v * 0.45);
+  const yInner = useTransform(smoothScrollY, (v) => v * -0.25);
 
   return (
     <section className="hero" ref={ref}>
-      <div className="hero-sky" aria-hidden />
-      <div className="hero-mountains-back" aria-hidden />
-      <div className="hero-mountains-front" aria-hidden />
+      <motion.div
+        className="hero-sky"
+        style={enabled ? { y: ySky } : undefined}
+        aria-hidden
+      />
+      <motion.div
+        className="hero-mountains-back"
+        style={enabled ? { y: yBack } : undefined}
+        aria-hidden
+      />
+      <motion.div
+        className="hero-mountains-front"
+        style={enabled ? { y: yFront } : undefined}
+        aria-hidden
+      />
 
       {/* The white tent — Ақ Шатыр */}
-      <svg
+      <motion.svg
         className="hero-tent"
         viewBox="0 0 200 140"
         xmlns="http://www.w3.org/2000/svg"
+        style={enabled ? { x: "-50%", y: yTent } : undefined}
         aria-hidden
       >
         <defs>
@@ -78,9 +89,12 @@ export default function Hero() {
         />
         <circle cx="100" cy="6" r="3" fill="#d6b56b" />
         <ellipse cx="100" cy="126" rx="92" ry="5" fill="rgba(0,0,0,0.4)" />
-      </svg>
+      </motion.svg>
 
-      <div className="container hero-inner">
+      <motion.div
+        className="container hero-inner"
+        style={enabled ? { y: yInner } : undefined}
+      >
         <span className="eyebrow">{t.hero.eyebrow}</span>
         <h1>
           {t.hero.title}
@@ -95,7 +109,7 @@ export default function Hero() {
             {t.hero.ctaSecondary}
           </a>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
