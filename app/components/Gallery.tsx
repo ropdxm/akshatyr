@@ -4,17 +4,18 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useT } from "../i18n/LanguageProvider";
 
-type Photo = { src: string; w: number; h: number };
+type Photo = { src: string };
 
-// Mixed portrait + landscape; the carousel frames them uniformly
-// via object-fit: contain so nothing important gets cropped.
+// All photos are pre-cropped to 1200x1200 (square) by
+// scripts/process-photos.mjs — see that file for the pipeline.
+const SIZE = 1200;
 const photos: Photo[] = [
-  { src: "/photos/photo-2.jpg", w: 1800, h: 1012 },
-  { src: "/photos/photo-1.jpg", w: 1012, h: 1800 },
-  { src: "/photos/photo-3.jpg", w: 1800, h: 1012 },
-  { src: "/photos/photo-6.jpg", w: 1012, h: 1800 },
-  { src: "/photos/photo-4.jpg", w: 1800, h: 1012 },
-  { src: "/photos/photo-5.jpg", w: 1012, h: 1800 },
+  { src: "/photos/photo-2.jpg" },
+  { src: "/photos/photo-1.jpg" },
+  { src: "/photos/photo-3.jpg" },
+  { src: "/photos/photo-6.jpg" },
+  { src: "/photos/photo-4.jpg" },
+  { src: "/photos/photo-5.jpg" },
 ];
 
 export default function Gallery() {
@@ -139,10 +140,10 @@ export default function Gallery() {
                 <Image
                   src={p.src}
                   alt={`${t.gallery.altPrefix} ${i + 1}`}
-                  width={p.w}
-                  height={p.h}
-                  sizes="(max-width: 700px) 100vw, (max-width: 1100px) 720px, 1000px"
-                  quality={82}
+                  width={SIZE}
+                  height={SIZE}
+                  sizes="(max-width: 700px) 90vw, (max-width: 1100px) 480px, 360px"
+                  quality={80}
                   priority={i === 0}
                 />
               </figure>

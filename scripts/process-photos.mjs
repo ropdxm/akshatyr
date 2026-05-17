@@ -22,8 +22,8 @@ const SOURCES = [
 ];
 
 const OUT_DIR = path.resolve("public/photos");
-const MAX_DIM = 1800;
-const QUALITY = 82;
+const SIZE = 1200; // square, edge length in px
+const QUALITY = 78;
 
 await mkdir(OUT_DIR, { recursive: true });
 
@@ -45,12 +45,12 @@ for (const src of SOURCES) {
   await sharp(inputBuffer)
     .rotate() // honour EXIF orientation, then strip the tag
     .resize({
-      width: MAX_DIM,
-      height: MAX_DIM,
-      fit: "inside",
-      withoutEnlargement: true,
+      width: SIZE,
+      height: SIZE,
+      fit: "cover",                       // crop to square
+      position: sharp.strategy.attention, // smart-pick the interesting region
     })
-    .jpeg({ quality: QUALITY, mozjpeg: true })
+    .jpeg({ quality: QUALITY, mozjpeg: true, progressive: true })
     .toFile(out);
 
   const meta = await sharp(out).metadata();
