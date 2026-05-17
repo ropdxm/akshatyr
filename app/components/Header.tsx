@@ -41,63 +41,67 @@ export default function Header() {
   const close = () => setOpen(false);
 
   return (
-    <header className="site-header">
-      <div className="container nav">
-        <a href="#" aria-label="Ақ Шатыр" onClick={close} className="brand-link">
-          <Logo size={44} />
-        </a>
+    <>
+      <header className="site-header">
+        <div className="container nav">
+          <a href="#" aria-label="Ақ Шатыр" onClick={close} className="brand-link">
+            <Logo size={44} />
+          </a>
 
-        <nav className="nav-desktop" aria-label="Главное меню">
-          <ul className="nav-links">
-            <li><a href="#about">{t.nav.about}</a></li>
-            <li><a href="#activities">{t.nav.activities}</a></li>
-            <li><a href="#stay">{t.nav.stay}</a></li>
-            <li><a href="#location">{t.nav.location}</a></li>
-          </ul>
-        </nav>
+          <nav className="nav-desktop" aria-label="Главное меню">
+            <ul className="nav-links">
+              <li><a href="#about">{t.nav.about}</a></li>
+              <li><a href="#activities">{t.nav.activities}</a></li>
+              <li><a href="#stay">{t.nav.stay}</a></li>
+              <li><a href="#location">{t.nav.location}</a></li>
+            </ul>
+          </nav>
 
-        <div className="nav-right">
-          <div
-            className="lang-switch"
-            role="group"
-            aria-label={t.langSwitch.ariaLabel}
-          >
+          <div className="nav-right">
+            <div
+              className="lang-switch"
+              role="group"
+              aria-label={t.langSwitch.ariaLabel}
+            >
+              <button
+                type="button"
+                className={lang === "ru" ? "is-active" : ""}
+                onClick={() => setLang("ru")}
+                aria-pressed={lang === "ru"}
+              >
+                {t.langSwitch.ru}
+              </button>
+              <button
+                type="button"
+                className={lang === "kk" ? "is-active" : ""}
+                onClick={() => setLang("kk")}
+                aria-pressed={lang === "kk"}
+              >
+                {t.langSwitch.kk}
+              </button>
+            </div>
+
+            <a href="#contacts" className="nav-cta nav-cta--desktop">{t.nav.book}</a>
+
             <button
               type="button"
-              className={lang === "ru" ? "is-active" : ""}
-              onClick={() => setLang("ru")}
-              aria-pressed={lang === "ru"}
+              className={`nav-burger${open ? " is-open" : ""}`}
+              aria-label={open ? "Закрыть меню" : "Открыть меню"}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen((v) => !v)}
             >
-              {t.langSwitch.ru}
-            </button>
-            <button
-              type="button"
-              className={lang === "kk" ? "is-active" : ""}
-              onClick={() => setLang("kk")}
-              aria-pressed={lang === "kk"}
-            >
-              {t.langSwitch.kk}
+              <span />
+              <span />
+              <span />
             </button>
           </div>
-
-          <a href="#contacts" className="nav-cta nav-cta--desktop">{t.nav.book}</a>
-
-          <button
-            type="button"
-            className={`nav-burger${open ? " is-open" : ""}`}
-            aria-label={open ? "Закрыть меню" : "Открыть меню"}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            onClick={() => setOpen((v) => !v)}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
         </div>
-      </div>
+      </header>
 
-      {/* Mobile slide-in panel */}
+      {/* Mobile menu — rendered OUTSIDE <header> so position:fixed is
+          relative to the viewport, not the header's containing block
+          (the header has backdrop-filter, which would otherwise trap us). */}
       <div
         className={`mobile-scrim${open ? " is-open" : ""}`}
         onClick={close}
@@ -108,6 +112,15 @@ export default function Header() {
         className={`mobile-menu${open ? " is-open" : ""}`}
         aria-hidden={!open}
       >
+        <button
+          type="button"
+          className="mobile-menu-close"
+          aria-label="Закрыть меню"
+          onClick={close}
+        >
+          <span />
+          <span />
+        </button>
         <ul className="mobile-nav-links">
           <li><a href="#about" onClick={close}>{t.nav.about}</a></li>
           <li><a href="#activities" onClick={close}>{t.nav.activities}</a></li>
@@ -122,6 +135,6 @@ export default function Header() {
           {t.nav.book}
         </a>
       </aside>
-    </header>
+    </>
   );
 }
