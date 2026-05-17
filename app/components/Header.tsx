@@ -52,6 +52,7 @@ export default function Header() {
             <ul className="nav-links">
               <li><a href="#about">{t.nav.about}</a></li>
               <li><a href="#activities">{t.nav.activities}</a></li>
+              <li><a href="#gallery">{t.nav.gallery}</a></li>
               <li><a href="#stay">{t.nav.stay}</a></li>
               <li><a href="#location">{t.nav.location}</a></li>
             </ul>
@@ -124,6 +125,7 @@ export default function Header() {
         <ul className="mobile-nav-links">
           <li><a href="#about" onClick={close}>{t.nav.about}</a></li>
           <li><a href="#activities" onClick={close}>{t.nav.activities}</a></li>
+          <li><a href="#gallery" onClick={close}>{t.nav.gallery}</a></li>
           <li><a href="#stay" onClick={close}>{t.nav.stay}</a></li>
           <li><a href="#location" onClick={close}>{t.nav.location}</a></li>
         </ul>

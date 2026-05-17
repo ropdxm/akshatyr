@@ -24,6 +24,7 @@ export type Dict = {
   nav: {
     about: string;
     activities: string;
+    gallery: string;
     stay: string;
     location: string;
     book: string;
@@ -47,6 +48,12 @@ export type Dict = {
     title: string;
     desc: string;
     items: ActivityItem[];
+  };
+  gallery: {
+    eyebrow: string;
+    title: string;
+    desc: string;
+    altPrefix: string;
   };
   rooms: {
     eyebrow: string;
@@ -85,6 +92,7 @@ export const translations: Record<Lang, Dict> = {
     nav: {
       about: "О зоне отдыха",
       activities: "Развлечения",
+      gallery: "Фото",
       stay: "Размещение",
       location: "Где находимся",
       book: "Бронировать",
@@ -126,6 +134,12 @@ export const translations: Record<Lang, Dict> = {
         { icon: "🎉", title: "Банкеты и торжества", text: "Площадка вмещает до 400 гостей — проводим свадьбы, дни рождения, корпоративы." },
         { icon: "🅿️", title: "Парковка", text: "Охраняемая парковка на 40 машин для гостей с проживанием и большая площадка на 200 мест." },
       ],
+    },
+    gallery: {
+      eyebrow: "Фото · Машат",
+      title: "Как у нас на самом деле",
+      desc: "Несколько кадров с нашей территории — деревянные коттеджи, открытые шатры и горы Машата вокруг.",
+      altPrefix: "Ақ Шатыр — фото",
     },
     rooms: {
       eyebrow: "Размещение и цены",
@@ -172,6 +186,7 @@ export const translations: Record<Lang, Dict> = {
     nav: {
       about: "Орталық туралы",
       activities: "Көңіл көтеру",
+      gallery: "Фото",
       stay: "Орналасу",
       location: "Біз қайдамыз",
       book: "Брондау",
@@ -213,6 +228,12 @@ export const translations: Record<Lang, Dict> = {
         { icon: "🎉", title: "Той және мерекелер", text: "Алаң 400 қонаққа дейін сыяды — үйлену тойлары, туған күндер, корпоративтер." },
         { icon: "🅿️", title: "Тұрақ", text: "Тұратын қонақтарға арналған 40 машинаға күзетілетін тұрақ және 200 орындық үлкен алаң." },
       ],
+    },
+    gallery: {
+      eyebrow: "Фото · Машат",
+      title: "Бізде шынында осылай",
+      desc: "Біздің аумақтан бірнеше сурет — ағаш коттедждер, ашық шатырлар мен айналадағы Машат таулары.",
+      altPrefix: "Ақ Шатыр — сурет",
     },
     rooms: {
       eyebrow: "Орналасу және бағалар",
