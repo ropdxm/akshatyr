@@ -846,42 +846,145 @@ h3 {
   color: var(--accent);
 }
 
-/* Gallery */
-.gallery-grid {
-  column-count: 3;
-  column-gap: 18px;
+/* Gallery — horizontal carousel */
+.gallery-carousel {
+  position: relative;
 }
 
-.gallery-item {
-  break-inside: avoid;
-  margin: 0 0 18px;
+.gallery-track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 4px 4px 8px;
+  margin: 0 -4px;
+  outline: none;
+}
+
+.gallery-track::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-track:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-2) inset;
+  border-radius: 14px;
+}
+
+.gallery-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
   border-radius: 14px;
   overflow: hidden;
+  background: linear-gradient(135deg, #0d3a22, #082b18);
   border: 1px solid var(--line);
-  background: var(--panel);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  line-height: 0;
+  aspect-ratio: 16 / 10;
+  position: relative;
+  margin: 0;
 }
 
-.gallery-item:hover {
-  transform: translateY(-4px);
-  border-color: rgba(214, 181, 107, 0.4);
-  box-shadow: 0 22px 48px -22px rgba(0, 0, 0, 0.65);
-}
-
-.gallery-item img {
-  display: block;
+.gallery-slide img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
-@media (max-width: 900px) {
-  .gallery-grid { column-count: 2; column-gap: 14px; }
-  .gallery-item { margin-bottom: 14px; }
+@media (min-width: 720px) {
+  .gallery-slide { flex: 0 0 calc(50% - 9px); }
 }
 
-@media (max-width: 520px) {
-  .gallery-grid { column-count: 1; }
+@media (min-width: 1024px) {
+  .gallery-slide { flex: 0 0 calc(33.333% - 12px); }
+}
+
+/* Nav arrows */
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(8, 43, 24, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  appearance: none;
+  padding: 0;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease,
+    opacity 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.55);
+}
+
+.gallery-nav:hover:not(:disabled) {
+  background: var(--accent);
+  color: #082b18;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.gallery-nav:active:not(:disabled) {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.gallery-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.gallery-nav--prev { left: -10px; }
+.gallery-nav--next { right: -10px; }
+
+/* Dots */
+.gallery-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.gallery-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s ease, width 0.25s ease,
+    border-radius 0.25s ease;
+}
+
+.gallery-dot:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.gallery-dot.is-active {
+  background: var(--accent);
+  width: 26px;
+  border-radius: 6px;
+}
+
+/* On phones the native swipe + dots are enough; hide the buttons */
+@media (max-width: 720px) {
+  .gallery-nav { display: none; }
+  .gallery-track { gap: 12px; }
+}
+
+@media (hover: none) {
+  .gallery-nav:hover:not(:disabled) {
+    transform: translateY(-50%);
+    background: rgba(8, 43, 24, 0.85);
+    color: var(--ink);
+  }
 }
 
 /* ============================================================
