@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import { useCallback, useEffect, useState } from "react";
 import { useT } from "../i18n/LanguageProvider";
 
 type Photo = { src: string };
 
-// All photos are pre-cropped to 1200x1200 (square) by
-// scripts/process-photos.mjs — see that file for the pipeline.
+// All photos are pre-cropped to 1200x1200 squares — see
+// scripts/process-photos.mjs.
 const SIZE = 1200;
 const photos: Photo[] = [
   { src: "/photos/photo-2.jpg" },
@@ -20,59 +21,42 @@ const photos: Photo[] = [
 
 export default function Gallery() {
   const { t } = useT();
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [index, setIndex] = useState(0);
 
-  const scrollToIndex = useCallback((i: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const slides = track.querySelectorAll<HTMLElement>(".gallery-slide");
-    const target = slides[i];
-    if (!target) return;
-    track.scrollTo({ left: target.offsetLeft - track.offsetLeft, behavior: "smooth" });
-  }, []);
+  // Embla handles the dragging, snapping, and — crucially — the
+  // infinite loop. Past the last slide loops to the first, and vice
+  // versa. `align: "center"` keeps the active slide centered when
+  // multiple slides are visible.
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: "center",
+    skipSnaps: false,
+    dragFree: false,
+  });
 
-  // Sync dot indicator with native scroll position / swipes
-  const handleScroll = useCallback(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const slides = Array.from(
-      track.querySelectorAll<HTMLElement>(".gallery-slide")
-    );
-    const center = track.scrollLeft + track.clientWidth / 2;
-    let best = 0;
-    let bestDist = Infinity;
-    slides.forEach((s, i) => {
-      const c = s.offsetLeft - track.offsetLeft + s.clientWidth / 2;
-      const d = Math.abs(c - center);
-      if (d < bestDist) {
-        bestDist = d;
-        best = i;
-      }
-    });
-    setIndex(best);
-  }, []);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const prev = () => scrollToIndex(Math.max(0, index - 1));
-  const next = () => scrollToIndex(Math.min(photos.length - 1, index + 1));
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
-  // Keyboard navigation when the track has focus
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        prev();
-      } else if (e.key === "ArrowRight") {
-        e.preventDefault();
-        next();
-      }
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
     };
-    track.addEventListener("keydown", onKey);
-    return () => track.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index]);
+  }, [emblaApi, onSelect]);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback(
+    (i: number) => emblaApi?.scrollTo(i),
+    [emblaApi]
+  );
 
   return (
     <section className="section" id="gallery">
@@ -87,8 +71,7 @@ export default function Gallery() {
           <button
             type="button"
             className="gallery-nav gallery-nav--prev"
-            onClick={prev}
-            disabled={index === 0}
+            onClick={scrollPrev}
             aria-label="Предыдущее фото"
           >
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden>
@@ -105,8 +88,7 @@ export default function Gallery() {
           <button
             type="button"
             className="gallery-nav gallery-nav--next"
-            onClick={next}
-            disabled={index === photos.length - 1}
+            onClick={scrollNext}
             aria-label="Следующее фото"
           >
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden>
@@ -122,32 +104,34 @@ export default function Gallery() {
           </button>
 
           <div
-            ref={trackRef}
-            className="gallery-track"
-            onScroll={handleScroll}
-            tabIndex={0}
+            className="embla"
+            ref={emblaRef}
             role="region"
             aria-roledescription="carousel"
             aria-label={t.gallery.title}
           >
-            {photos.map((p, i) => (
-              <figure
-                className="gallery-slide"
-                key={p.src}
-                aria-roledescription="slide"
-                aria-label={`${i + 1} / ${photos.length}`}
-              >
-                <Image
-                  src={p.src}
-                  alt={`${t.gallery.altPrefix} ${i + 1}`}
-                  width={SIZE}
-                  height={SIZE}
-                  sizes="(max-width: 700px) 90vw, (max-width: 1100px) 480px, 360px"
-                  quality={80}
-                  priority={i === 0}
-                />
-              </figure>
-            ))}
+            <div className="embla__container">
+              {photos.map((p, i) => (
+                <figure
+                  key={p.src}
+                  className={`embla__slide gallery-slide${
+                    i === selectedIndex ? " is-active" : ""
+                  }`}
+                  aria-roledescription="slide"
+                  aria-label={`${i + 1} / ${photos.length}`}
+                >
+                  <Image
+                    src={p.src}
+                    alt={`${t.gallery.altPrefix} ${i + 1}`}
+                    width={SIZE}
+                    height={SIZE}
+                    sizes="(max-width: 700px) 90vw, (max-width: 1100px) 480px, 360px"
+                    quality={80}
+                    priority={i === 0}
+                  />
+                </figure>
+              ))}
+            </div>
           </div>
 
           <div className="gallery-dots" role="tablist" aria-label="Выбрать фото">
@@ -156,10 +140,10 @@ export default function Gallery() {
                 key={i}
                 type="button"
                 role="tab"
-                aria-selected={i === index}
+                aria-selected={i === selectedIndex}
                 aria-label={`Фото ${i + 1}`}
-                className={`gallery-dot${i === index ? " is-active" : ""}`}
-                onClick={() => scrollToIndex(i)}
+                className={`gallery-dot${i === selectedIndex ? " is-active" : ""}`}
+                onClick={() => scrollTo(i)}
               />
             ))}
           </div>
