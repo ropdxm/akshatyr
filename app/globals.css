@@ -846,6 +846,109 @@ h3 {
   color: var(--accent);
 }
 
+/* Extras — additional services price list */
+.extras {
+  margin-top: 56px;
+  padding: 32px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(19, 76, 45, 0.55), rgba(8, 43, 24, 0.55));
+  border: 1px solid var(--line);
+}
+
+.extras-head {
+  margin-bottom: 22px;
+}
+
+.extras-head h3 {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.extras-head p {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.extras-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.extras-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 16px;
+}
+
+.extras-row:last-child {
+  border-bottom: 0;
+}
+
+.extras-name {
+  color: var(--ink);
+}
+
+.extras-name small {
+  color: var(--muted);
+  font-size: 13px;
+  margin-left: 4px;
+}
+
+.extras-dots {
+  flex: 1;
+  height: 1px;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.18);
+  margin-bottom: 5px;
+  min-width: 24px;
+}
+
+.extras-price {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .extras { padding: 24px 20px; margin-top: 40px; }
+  .extras-row { font-size: 15px; padding: 12px 0; }
+  .extras-price { font-size: 17px; }
+}
+
+/* Map + 2GIS CTA stack */
+.map-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.map-cta {
+  align-self: flex-start;
+}
+
+@media (max-width: 800px) {
+  .map-cta {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+/* Footer links — wrap nicely on phones */
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+
+.footer-links span {
+  opacity: 0.4;
+}
+
 /* Gallery — Embla Carousel with infinite loop */
 .gallery-carousel {
   position: relative;

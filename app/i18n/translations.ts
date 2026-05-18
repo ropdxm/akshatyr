@@ -8,7 +8,12 @@ export type ActivityItem = {
   text: string;
 };
 
-export type RoomNoteKey = "perNight" | "perCottage" | "perDay" | "onRequestNote";
+export type RoomNoteKey =
+  | "perNight"
+  | "perCottage"
+  | "perDay"
+  | "perGroup"
+  | "onRequestNote";
 export type RoomPriceKey = "onRequest";
 
 export type RoomItem = {
@@ -18,6 +23,12 @@ export type RoomItem = {
   price?: string;
   priceKey?: RoomPriceKey;
   noteKey: RoomNoteKey;
+};
+
+export type ExtraItem = {
+  title: string;
+  price: string;
+  note?: string;
 };
 
 export type Dict = {
@@ -62,9 +73,13 @@ export type Dict = {
     perNight: string;
     perCottage: string;
     perDay: string;
+    perGroup: string;
     onRequest: string;
     onRequestNote: string;
     items: RoomItem[];
+    extrasTitle: string;
+    extrasDesc: string;
+    extras: ExtraItem[];
   };
   location: {
     eyebrow: string;
@@ -72,10 +87,12 @@ export type Dict = {
     desc: string;
     addressLabel: string;
     address: string[];
+    mapCta: string;
     phoneLabel: string;
     hoursLabel: string;
     hours: string[];
     igLabel: string;
+    tiktokLabel: string;
   };
   footer: {
     copy: string;
@@ -143,34 +160,46 @@ export const translations: Record<Lang, Dict> = {
     },
     rooms: {
       eyebrow: "Размещение и цены",
-      title: "Где остановиться",
+      title: "Коттеджи и беседки",
       desc:
-        "От уютных двухместных номеров до VIP-коттеджа с собственным бассейном. Заселение с 12:00 до 14:00, выезд до 12:00. Цены ориентировочные — точную стоимость и наличие уточняйте по телефону.",
-      perNight: "за номер в сутки",
+        "Коттеджи на 2, 4 и 6 гостей и просторные топчаны под навесом для дневного отдыха большими компаниями. Цены и наличие уточняйте по телефону — бронируем заранее.",
+      perNight: "за коттедж в сутки",
       perCottage: "за коттедж в сутки",
       perDay: "за день",
+      perGroup: "за топчан в день",
       onRequest: "По запросу",
       onRequestNote: "уточняйте при бронировании",
       items: [
-        { tag: "Standard", title: "Двухместные номера у горы", features: ["TV", "Кондиционер", "Wi-Fi", "Душ", "Холодильник", "Топчан у реки"], price: "от 25 000 ₸", noteKey: "perNight" },
-        { tag: "Standard +", title: "Двухместные с верандой", features: ["Веранда с видом", "Вид на горы и реку", "TV, AC, Wi-Fi", "Душ"], price: "от 35 000 ₸", noteKey: "perNight" },
-        { tag: "Suite", title: "Трёхкомнатные люксы", features: ["До 4 гостей", "Гостиная", "Кухня", "Отдельная спальня"], price: "от 60 000 ₸", noteKey: "perNight" },
-        { tag: "Cottage", title: "Двухэтажные коттеджи", features: ["До 6 гостей", "Терраса", "Панорамные окна", "Полная кухня"], price: "от 90 000 ₸", noteKey: "perCottage" },
-        { tag: "VIP", title: "VIP-коттедж со своим бассейном", features: ["Два этажа", "Личный бассейн", "Сауна", "Бар", "Большая веранда"], priceKey: "onRequest", noteKey: "onRequestNote" },
-        { tag: "День", title: "Топчан / беседка на день", features: ["До 8 гостей", "У реки", "Мангал", "Доступ к бассейну"], price: "от 10 000 ₸", noteKey: "perDay" },
+        { tag: "Коттедж", title: "2-местный коттедж", features: ["Кондиционер", "Wi-Fi", "TV", "Душ", "Холодильник"], price: "35 000 ₸", noteKey: "perNight" },
+        { tag: "Коттедж", title: "4-местный коттедж", features: ["До 4 гостей", "Кухонная зона", "Кондиционер", "Wi-Fi", "TV", "Душ"], price: "60 000 ₸", noteKey: "perNight" },
+        { tag: "Коттедж", title: "6-местный коттедж", features: ["До 6 гостей", "Два этажа", "Полная кухня", "Терраса", "Кондиционер", "Wi-Fi"], price: "90 000 ₸", noteKey: "perNight" },
+        { tag: "Топчан", title: "Топчан на 12 человек", features: ["Беседка у реки", "Стол и сидения", "Мангал", "Тень"], price: "15 000 ₸", noteKey: "perGroup" },
+        { tag: "Топчан", title: "Топчан на 25 человек", features: ["Большая беседка", "Стол на 25 чел.", "Мангал", "Тень"], price: "30 000 ₸", noteKey: "perGroup" },
+      ],
+      extrasTitle: "Дополнительные услуги",
+      extrasDesc: "Цены на доплаты и услуги на территории.",
+      extras: [
+        { title: "Вход на территорию", price: "3 000 ₸", note: "с человека" },
+        { title: "Вход со своей едой", price: "5 000 ₸" },
+        { title: "Въезд автомобиля", price: "3 000 ₸" },
+        { title: "Приготовление блюда", price: "5 000 ₸", note: "за 1 вид" },
+        { title: "Шашлык", price: "200 ₸", note: "за 1 шт." },
+        { title: "Аренда посуды", price: "500 ₸", note: "на 1 человека" },
       ],
     },
     location: {
       eyebrow: "Контакты",
       title: "Как нас найти",
       desc:
-        "Тюлькубасский район, село Машат — около 80 км от Шымкента по трассе в сторону Тараза. Бронируйте заранее в выходные и праздничные дни.",
+        "Мы в Машатском ущелье — час езды от Шымкента по трассе в сторону Тараза. Бронируйте заранее в выходные и праздничные дни.",
       addressLabel: "Адрес",
-      address: ["Тюлькубасский район, с. Машат,", "ущелье Машат, Туркестанская обл."],
+      address: ["ул. Машат, 89", "Машатское ущелье, Туркестанская обл."],
+      mapCta: "Открыть в 2ГИС",
       phoneLabel: "Телефон / WhatsApp",
       hoursLabel: "Режим работы",
       hours: ["Ежедневно, 10:00 – 22:30", "Заселение: 12:00 – 14:00"],
       igLabel: "Instagram",
+      tiktokLabel: "TikTok",
     },
     footer: {
       copy: "Ақ Шатыр — зона отдыха в ущелье Машат.",
@@ -237,34 +266,46 @@ export const translations: Record<Lang, Dict> = {
     },
     rooms: {
       eyebrow: "Орналасу және бағалар",
-      title: "Қайда тоқтайсыз",
+      title: "Коттедждер мен тапшандар",
       desc:
-        "Жайлы екі орындық нөмірлерден жеке бассейні бар VIP-коттеджге дейін. Кіру 12:00–14:00, шығу 12:00-ге дейін. Бағалар шамамен — нақты құн мен бос орынды телефон арқылы нақтылаңыз.",
-      perNight: "тәулігіне нөмір үшін",
+        "2, 4 және 6 қонаққа арналған коттедждер, сондай-ақ үлкен компанияларға арналған кең тапшандар. Бағалар мен бос орындарды телефон арқылы нақтылаңыз — алдын ала брондаймыз.",
+      perNight: "тәулігіне коттедж үшін",
       perCottage: "тәулігіне коттедж үшін",
       perDay: "күніне",
+      perGroup: "күніне тапшан үшін",
       onRequest: "Сұраныс бойынша",
       onRequestNote: "брондау кезінде нақтылаңыз",
       items: [
-        { tag: "Standard", title: "Тау етегіндегі екі орындық нөмірлер", features: ["TV", "Кондиционер", "Wi-Fi", "Душ", "Тоңазытқыш", "Өзен жағасында топшан"], price: "25 000 ₸-ден", noteKey: "perNight" },
-        { tag: "Standard +", title: "Верандасы бар екі орындық", features: ["Көрінісі бар веранда", "Тау мен өзен көрінісі", "TV, AC, Wi-Fi", "Душ"], price: "35 000 ₸-ден", noteKey: "perNight" },
-        { tag: "Suite", title: "Үш бөлмелі люкстер", features: ["4 қонаққа дейін", "Қонақ бөлмесі", "Ас үй", "Жеке жатын бөлме"], price: "60 000 ₸-ден", noteKey: "perNight" },
-        { tag: "Cottage", title: "Екі қабатты коттедждер", features: ["6 қонаққа дейін", "Терраса", "Панорамалық терезелер", "Толық ас үй"], price: "90 000 ₸-ден", noteKey: "perCottage" },
-        { tag: "VIP", title: "Жеке бассейні бар VIP-коттедж", features: ["Екі қабат", "Жеке бассейн", "Сауна", "Бар", "Үлкен веранда"], priceKey: "onRequest", noteKey: "onRequestNote" },
-        { tag: "Күн", title: "Күндік топшан / беседка", features: ["8 қонаққа дейін", "Өзен жағасында", "Мангал", "Бассейнге кіру"], price: "10 000 ₸-ден", noteKey: "perDay" },
+        { tag: "Коттедж", title: "2 орындық коттедж", features: ["Кондиционер", "Wi-Fi", "TV", "Душ", "Тоңазытқыш"], price: "35 000 ₸", noteKey: "perNight" },
+        { tag: "Коттедж", title: "4 орындық коттедж", features: ["4 қонаққа дейін", "Ас үй аймағы", "Кондиционер", "Wi-Fi", "TV", "Душ"], price: "60 000 ₸", noteKey: "perNight" },
+        { tag: "Коттедж", title: "6 орындық коттедж", features: ["6 қонаққа дейін", "Екі қабат", "Толық ас үй", "Терраса", "Кондиционер", "Wi-Fi"], price: "90 000 ₸", noteKey: "perNight" },
+        { tag: "Тапшан", title: "12 адамдық тапшан", features: ["Өзен жағасында", "Үстел мен орындықтар", "Мангал", "Көлеңке"], price: "15 000 ₸", noteKey: "perGroup" },
+        { tag: "Тапшан", title: "25 адамдық тапшан", features: ["Үлкен беседка", "25 адамдық үстел", "Мангал", "Көлеңке"], price: "30 000 ₸", noteKey: "perGroup" },
+      ],
+      extrasTitle: "Қосымша қызметтер",
+      extrasDesc: "Аумақтағы қосымша ақыларды және қызметтердің бағалары.",
+      extras: [
+        { title: "Демалыс орнына кіру", price: "3 000 ₸", note: "1 адамнан" },
+        { title: "Тамақ алып кіру", price: "5 000 ₸" },
+        { title: "Автокөлікті кіргізу", price: "3 000 ₸" },
+        { title: "Тамақ дайындау", price: "5 000 ₸", note: "1 түрі" },
+        { title: "Шашлық пісіру", price: "200 ₸", note: "1 дана" },
+        { title: "Ыдыс аяқ жалға беру", price: "500 ₸", note: "1 адамға" },
       ],
     },
     location: {
       eyebrow: "Байланыс",
       title: "Бізді қалай табуға болады",
       desc:
-        "Түлкібас ауданы, Машат ауылы — Шымкенттен Тараз бағытындағы тас жол бойымен шамамен 80 км. Демалыс және мереке күндеріне алдын ала брондаңыз.",
+        "Біз Машат шатқалындамыз — Шымкенттен Тараз бағытындағы тас жол бойымен бір сағаттық жол. Демалыс және мереке күндеріне алдын ала брондаңыз.",
       addressLabel: "Мекенжай",
-      address: ["Түлкібас ауданы, Машат а.,", "Машат шатқалы, Түркістан обл."],
+      address: ["Машат көшесі, 89", "Машат шатқалы, Түркістан обл."],
+      mapCta: "2ГИС-те ашу",
       phoneLabel: "Телефон / WhatsApp",
       hoursLabel: "Жұмыс тәртібі",
       hours: ["Күн сайын, 10:00 – 22:30", "Орналасу: 12:00 – 14:00"],
       igLabel: "Instagram",
+      tiktokLabel: "TikTok",
     },
     footer: {
       copy: "Ақ Шатыр — Машат шатқалындағы демалыс орталығы.",

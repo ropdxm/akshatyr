@@ -2,6 +2,14 @@
 
 import { useT } from "../i18n/LanguageProvider";
 
+const PHONE = "+7 702 850 4376";
+const PHONE_TEL = "+77028504376";
+const INSTAGRAM_URL = "https://www.instagram.com/akshatyr_demalys_ortalygy/";
+const INSTAGRAM_HANDLE = "@akshatyr_demalys_ortalygy";
+const TIKTOK_URL = "https://www.tiktok.com/@akshatyr_zonaotdy";
+const TIKTOK_HANDLE = "@akshatyr_zonaotdy";
+const MAP_2GIS_URL = "https://go.2gis.com/Pbt1f";
+
 export default function Location() {
   const { t } = useT();
   const l = t.location;
@@ -16,13 +24,23 @@ export default function Location() {
         </div>
 
         <div className="split" id="contacts">
-          <div className="map-card">
-            <iframe
-              title="Ақ Шатыр — Машат"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=70.16%2C42.46%2C70.30%2C42.56&layer=mapnik&marker=42.515%2C70.235"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
+          <div className="map-wrap">
+            <div className="map-card">
+              <iframe
+                title="Ақ Шатыр — Машат"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=70.10%2C42.45%2C70.32%2C42.58&layer=mapnik&marker=42.515%2C70.235"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <a
+              className="btn btn-primary map-cta"
+              href={MAP_2GIS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {l.mapCta} →
+            </a>
           </div>
 
           <ul className="contact-list">
@@ -44,8 +62,8 @@ export default function Location() {
               <span className="ic" aria-hidden>📞</span>
               <div>
                 <span className="key">{l.phoneLabel}</span>
-                <a className="val" href="tel:+77776993668">
-                  +7 777 699 36 68
+                <a className="val" href={`tel:${PHONE_TEL}`}>
+                  {PHONE}
                 </a>
               </div>
             </li>
@@ -69,11 +87,25 @@ export default function Location() {
                 <span className="key">{l.igLabel}</span>
                 <a
                   className="val"
-                  href="https://www.instagram.com/akshatyr_demalys_ortalygy"
+                  href={INSTAGRAM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  @akshatyr_demalys_ortalygy
+                  {INSTAGRAM_HANDLE}
+                </a>
+              </div>
+            </li>
+            <li>
+              <span className="ic" aria-hidden>🎵</span>
+              <div>
+                <span className="key">{l.tiktokLabel}</span>
+                <a
+                  className="val"
+                  href={TIKTOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {TIKTOK_HANDLE}
                 </a>
               </div>
             </li>

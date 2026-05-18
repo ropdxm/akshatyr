@@ -41,6 +41,26 @@ export default function Accommodation() {
             </article>
           ))}
         </div>
+
+        {/* Дополнительные услуги — additional services price list */}
+        <div className="extras">
+          <div className="extras-head">
+            <h3>{r.extrasTitle}</h3>
+            <p>{r.extrasDesc}</p>
+          </div>
+          <ul className="extras-list">
+            {r.extras.map((e) => (
+              <li key={e.title} className="extras-row">
+                <span className="extras-name">
+                  {e.title}
+                  {e.note && <small> · {e.note}</small>}
+                </span>
+                <span className="extras-dots" aria-hidden />
+                <span className="extras-price">{e.price}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );
