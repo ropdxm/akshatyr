@@ -18,7 +18,8 @@
       "Bash(grep -iE \"\\\\.\\(heic|heif|jpg|jpeg|png|webp\\)$\")",
       "Bash(magick --version)",
       "Bash(node -e \"try { require.resolve\\('sharp'\\); console.log\\('sharp available'\\); } catch { console.log\\('sharp not installed'\\); }\")",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(curl -sS -A \"akshatyr-site/1.0\" \"https://nominatim.openstreetmap.org/lookup?osm_ids=R18446218&format=json\")"
     ]
   }
 }

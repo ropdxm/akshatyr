@@ -28,7 +28,7 @@ export default function Location() {
             <div className="map-card">
               <iframe
                 title="Ақ Шатыр — Машат"
-                src="https://www.openstreetmap.org/export/embed.html?bbox=70.10%2C42.45%2C70.32%2C42.58&layer=mapnik&marker=42.515%2C70.235"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=69.940%2C42.470%2C69.995%2C42.510&layer=mapnik&marker=42.4893%2C69.9653"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
