@@ -7,7 +7,18 @@
       "WebFetch(domain:shym.restoran.kz)",
       "Bash(npm install:*)",
       "Bash(npx next:*)",
-      "Bash(find . -name *.js -o -name *.jsx -o -name *.mjs)"
+      "Bash(find . -name *.js -o -name *.jsx -o -name *.mjs)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(vercel --version)",
+      "Bash(vercel whoami *)",
+      "Bash(vercel --yes --prod)",
+      "Bash(npm i *)",
+      "Bash(git push *)",
+      "Bash(grep -iE \"\\\\.\\(heic|heif|jpg|jpeg|png|webp\\)$\")",
+      "Bash(magick --version)",
+      "Bash(node -e \"try { require.resolve\\('sharp'\\); console.log\\('sharp available'\\); } catch { console.log\\('sharp not installed'\\); }\")",
+      "Bash(node -e ' *)"
     ]
   }
 }
