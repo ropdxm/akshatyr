@@ -61,10 +61,10 @@ export default function Hero() {
         aria-hidden
       />
 
-      {/* The white tent — Ақ Шатыр */}
+      {/* Twin tents — mirrors the logo's multi-peak silhouette */}
       <motion.svg
         className="hero-tent"
-        viewBox="0 0 200 140"
+        viewBox="0 0 220 140"
         xmlns="http://www.w3.org/2000/svg"
         style={enabled ? { x: "-50%", y: yTent } : undefined}
         aria-hidden
@@ -75,20 +75,39 @@ export default function Hero() {
             <stop offset="100%" stopColor="#d9cdb6" />
           </linearGradient>
         </defs>
+
+        {/* Shared ground shadow under both tents */}
+        <ellipse cx="110" cy="128" rx="108" ry="5" fill="rgba(0,0,0,0.45)" />
+
+        {/* Back / left tent — slightly smaller, behind the front one */}
         <path
-          d="M100 8 L188 122 L12 122 Z"
+          d="M60 26 L118 124 L8 124 Z"
           fill="url(#tentGrad)"
           stroke="rgba(0,0,0,0.18)"
           strokeWidth="1"
         />
         <path
-          d="M100 8 L72 122 M100 8 L128 122 M100 8 L52 122 M100 8 L148 122"
+          d="M60 26 L40 124 M60 26 L80 124 M60 26 L100 124"
           stroke="rgba(0,0,0,0.09)"
           strokeWidth="1"
           fill="none"
         />
-        <circle cx="100" cy="6" r="3" fill="#d6b56b" />
-        <ellipse cx="100" cy="126" rx="92" ry="5" fill="rgba(0,0,0,0.4)" />
+        <circle cx="60" cy="24" r="2.5" fill="#d6b56b" />
+
+        {/* Front / right tent — larger, overlaps the back one */}
+        <path
+          d="M155 8 L215 124 L95 124 Z"
+          fill="url(#tentGrad)"
+          stroke="rgba(0,0,0,0.18)"
+          strokeWidth="1"
+        />
+        <path
+          d="M155 8 L135 124 M155 8 L175 124 M155 8 L115 124 M155 8 L195 124"
+          stroke="rgba(0,0,0,0.09)"
+          strokeWidth="1"
+          fill="none"
+        />
+        <circle cx="155" cy="6" r="3" fill="#d6b56b" />
       </motion.svg>
 
       <motion.div
@@ -102,7 +121,12 @@ export default function Hero() {
         </h1>
         <p className="lead">{t.hero.lead}</p>
         <div className="hero-actions">
-          <a href="#contacts" className="btn btn-primary">
+          <a
+            href="https://wa.me/77474829219"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary"
+          >
             {t.hero.ctaPrimary}
           </a>
           <a href="#activities" className="btn btn-ghost">

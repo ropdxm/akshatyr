@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useT } from "../i18n/LanguageProvider";
 import Logo from "./Logo";
 
+const WHATSAPP_URL = "https://wa.me/77474829219";
+
 export default function Header() {
   const { lang, setLang, t } = useT();
   const [open, setOpen] = useState(false);
@@ -82,7 +84,14 @@ export default function Header() {
               </button>
             </div>
 
-            <a href="#contacts" className="nav-cta nav-cta--desktop">{t.nav.book}</a>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nav-cta nav-cta--desktop"
+            >
+              {t.nav.book}
+            </a>
 
             <button
               type="button"
@@ -130,7 +139,9 @@ export default function Header() {
           <li><a href="#location" onClick={close}>{t.nav.location}</a></li>
         </ul>
         <a
-          href="#contacts"
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="btn btn-primary mobile-cta"
           onClick={close}
         >
