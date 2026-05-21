@@ -122,7 +122,7 @@ export default function Hero() {
         <p className="lead">{t.hero.lead}</p>
         <div className="hero-actions">
           <a
-            href="https://wa.me/77474829219"
+            href="https://wa.me/77028504376"
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary"

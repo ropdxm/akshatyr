@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useT } from "../i18n/LanguageProvider";
 import Logo from "./Logo";
 
-const WHATSAPP_URL = "https://wa.me/77474829219";
+const WHATSAPP_URL = "https://wa.me/77028504376";
 
 export default function Header() {
   const { lang, setLang, t } = useT();
